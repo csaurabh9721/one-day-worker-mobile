@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:one_day_worker/shared/components/label.dart';
 import 'package:one_day_worker/shared/components/primary_button.dart';
 
+import '../../../core/routes/route_names.dart';
 import '../../../core/theme/app_color.dart';
 
 class SignInPage extends StatefulWidget {
@@ -164,6 +165,8 @@ class _SignInPageState extends State<SignInPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Sign Up Successful")));
+      Navigator.pushNamed(context, RouteNames.dashboard);
+
     }
   }
 

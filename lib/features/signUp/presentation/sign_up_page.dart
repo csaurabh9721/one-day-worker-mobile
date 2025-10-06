@@ -193,6 +193,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Sign Up Successful")));
+      Navigator.pushNamed(context, RouteNames.dashboard);
     }
   }
 

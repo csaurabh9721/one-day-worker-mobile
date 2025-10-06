@@ -3,8 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:one_day_worker/core/routes/route_names.dart';
 import 'package:one_day_worker/core/theme/app_color.dart';
 
-import '../../../shared/components/primary_button.dart';
-import '../../../shared/images/png_images.dart';
+import '../../../../shared/images/png_images.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
