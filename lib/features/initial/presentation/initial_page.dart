@@ -14,8 +14,11 @@ class InitialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Padding(
+      body: Container(
         padding: const EdgeInsets.symmetric(vertical: 50),
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(gradient: AppColors.backgroundGradient),
         child: Column(
           children: [
             SizedBox(height: 20),
@@ -76,6 +79,7 @@ class InitialPage extends StatelessWidget {
             PrimaryButton(
               width: 222,
               text: "Let's Get Started",
+              isNotGradient: true,
               onPressed: () => _onTapStart(context),
             ),
             SizedBox(height: 16, width: size.width),
@@ -85,7 +89,10 @@ class InitialPage extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "Already have an account ? ",
-                    style: GoogleFonts.inter(color: Colors.grey.shade800),
+                    style: GoogleFonts.inter(
+                      color: Colors.grey.shade800,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   TextSpan(
                     text: "Sign In",

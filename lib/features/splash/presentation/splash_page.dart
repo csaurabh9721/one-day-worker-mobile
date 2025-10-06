@@ -34,6 +34,7 @@ class _SplashPageState extends State<SplashPage> {
         width: size.width,
         height: size.height,
         decoration: BoxDecoration(
+          gradient: AppColors.backgroundGradient,
           image: DecorationImage(
             image: AssetImage(PngImages.splashScreen),
             fit: BoxFit.cover,
