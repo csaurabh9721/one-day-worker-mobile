@@ -31,13 +31,49 @@ class WorkerList extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
                     index == 0
-                        ? "https://www.goconstruct.org/media/cv0ikdh1/joiner-ss1704723019.jpg?width=510&height=332&format=WebP&quality=75&v=1db885fa3742490"
+                        ? "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop"
                         : index == 1
-                        ? "https://thumbs.dreamstime.com/b/serious-male-teacher-formal-wear-holding-wooden-pointer-front-chalkboard-equations-155809695.jpg"
-                        : "https://img.freepik.com/premium-photo/black-afro-man-looking-excited-surprised-pointing-side-painting-home-concept_1194-385344.jpg?semt=ais_hybrid&w=740&q=80",
+                        ? "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop"
+                        : "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop",
                     height: 100,
                     width: 100,
                     fit: BoxFit.fill,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.grey.shade600,
+                        ),
+                      );
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 16.0),

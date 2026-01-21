@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../core/routes/route_names.dart';
+
 class Category extends StatelessWidget {
   const Category({super.key});
+
+  void _onTapSeeAll(BuildContext context) {
+    Navigator.pushNamed(context, RouteNames.viewAllCategories);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +49,14 @@ class Category extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("Category"),
-              Text(
-                "See All",
-                style: GoogleFonts.inter(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () => _onTapSeeAll(context),
+                child: Text(
+                  "See All",
+                  style: GoogleFonts.inter(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

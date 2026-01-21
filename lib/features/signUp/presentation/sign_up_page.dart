@@ -23,8 +23,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
-  ValueNotifier<bool> _obscureConfirmPassword = ValueNotifier<bool>(true);
+ final ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+ final ValueNotifier<bool> _obscureConfirmPassword = ValueNotifier<bool>(true);
 
   @override
   Widget build(BuildContext context) {
