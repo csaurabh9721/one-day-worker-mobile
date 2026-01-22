@@ -5,7 +5,7 @@ import '../../../core/theme/app_color.dart';
 
 class WorkerListPage extends StatefulWidget {
   final String categoryName;
-  final String categoryIcon;
+  final IconData categoryIcon;
   final List<Color> categoryGradient;
 
   const WorkerListPage({
@@ -238,10 +238,7 @@ class _WorkerListPageState extends State<WorkerListPage>
                       right: 20,
                       top: 60,
                       child: Icon(
-                        IconData(
-                          widget.categoryIcon.codeUnitAt(0),
-                          fontFamily: 'MaterialIcons',
-                        ),
+                          widget.categoryIcon,
                         size: 100,
                         color: Colors.white.withValues(alpha: 0.2),
                       ),
@@ -428,27 +425,97 @@ class _WorkerListPageState extends State<WorkerListPage>
   }
 
   Widget _buildWorkerCard(Map<String, dynamic> worker, int index) {
-    return Hero(
-      tag: 'worker_$index',
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    FadeTransition(
-                  opacity: animation,
-                  child: WorkerDetailPage(
-                    worker: worker,
-                    heroTag: 'worker_$index',
-                  ),
-                ),
-                transitionDuration: const Duration(milliseconds: 300),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          // Show worker details in bottom sheet instead of navigation
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               ),
-            );
-          },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      worker['image'],
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            size: 60,
+                            color: Colors.grey.shade600,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    worker['name'],
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    worker['profession'],
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Contacting ${worker['name']}...'),
+                            backgroundColor: widget.categoryGradient.first,
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: widget.categoryGradient.first,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Contact Worker',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
           borderRadius: BorderRadius.circular(16),
           child: Container(
             decoration: BoxDecoration(
@@ -655,209 +722,7 @@ class _WorkerListPageState extends State<WorkerListPage>
             ),
           ),
         ),
-      ),
     );
   }
 }
 
-class WorkerDetailPage extends StatelessWidget {
-  final Map<String, dynamic> worker;
-  final String heroTag;
-
-  const WorkerDetailPage({
-    super.key,
-    required this.worker,
-    required this.heroTag,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Hero(
-                tag: heroTag,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
-                    worker['image'],
-                    height: 200,
-                    width: 200,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 200,
-                        width: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
-                          color: Colors.grey.shade600,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              worker['name'],
-              style: GoogleFonts.inter(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: AppColors.text,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              worker['profession'],
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildInfoCard(
-                    'Rating',
-                    worker['rating'].toString(),
-                    Icons.star,
-                    Colors.amber,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildInfoCard(
-                    'Experience',
-                    worker['experience'],
-                    Icons.work_outline,
-                    Colors.blue,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildInfoCard(
-                    'Price',
-                    worker['price'],
-                    Icons.attach_money,
-                    Colors.green,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            Text(
-              'About',
-              style: GoogleFonts.inter(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.text,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Professional ${worker['profession'].toLowerCase()} with ${worker['experience']} of experience. Committed to providing high-quality service and customer satisfaction. Available for both residential and commercial projects.',
-              style: GoogleFonts.inter(
-                fontSize: 16,
-                color: Colors.grey.shade700,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Contacting ${worker['name']}...'),
-                      backgroundColor: AppColors.primary,
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  'Contact Worker',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(String title, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            size: 24,
-            color: color,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.text,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: GoogleFonts.inter(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

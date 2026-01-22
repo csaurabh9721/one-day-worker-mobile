@@ -31,16 +31,22 @@ final class AppRoutes {
           ),
         );
       case RouteNames.viewAllCategories:
-        return MaterialPageRoute(builder: (context) => const ViewAllCategoriesPage());
+        return MaterialPageRoute(
+          builder: (context) => const ViewAllCategoriesPage(),
+        );
       case RouteNames.workerList:
-        return MaterialPageRoute(builder: (context) {
-          final args = settings.arguments as Map<String, dynamic>?;
-          return WorkerListPage(
-            categoryName: args?['categoryName'] ?? 'Workers',
-            categoryIcon: args?['categoryIcon'] ?? 'Icons.work',
-            categoryGradient: args?['categoryGradient'] ?? [AppColors.primary, AppColors.secondary],
-          );
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            final args = settings.arguments as Map<String, dynamic>?;
+            return WorkerListPage(
+              categoryName: args?['categoryName'] ?? 'Workers',
+              categoryIcon: args?['categoryIcon'] ?? Icons.work,
+              categoryGradient:
+                  args?['categoryGradient'] ??
+                  [AppColors.primary, AppColors.secondary],
+            );
+          },
+        );
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
